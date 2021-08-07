@@ -1,0 +1,16 @@
+/*
+Kenneth Corrales Lizano carnet 2017151342
+La probabilidad del jugador de ganar es:
+
+Codigo del Programa
+*/
+
+'clearoutput 
+copy 4#1,13 deck 
+shuffle deck deck 
+take deck 1,2 misCartas
+remove deck 1,2 deck
+take deck 1,2 casaCartas
+remove deck 1,2 deck
+print deck
+print misCartas
