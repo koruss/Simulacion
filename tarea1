@@ -4,13 +4,68 @@ La probabilidad del jugador de ganar es:
 
 Codigo del Programa
 */
+clearoutput 
 
-'clearoutput 
-copy 4#1,13 deck 
-shuffle deck deck 
-take deck 1,2 misCartas
-remove deck 1,2 deck
-take deck 1,2 casaCartas
-remove deck 1,2 deck
-print deck
-print misCartas
+
+newcmd contarCartas mano resultado
+	resultado = 0 
+	recode mano > 10 10 manoTemp
+	sum manoTemp resultado
+	count manoTemp = 1 contAs
+	if contAs <> 0
+		faltante = 21-resultado
+		divide faltante 10 faltante
+		integer floor faltante faltante
+		while contAs > 0 and faltante > 0
+			resultado = resultado +10
+			contAs = contAs - 1
+			faltante= faltante - 1
+		end  
+	end
+end
+
+newcmd calcularJugada suma cartaVisible decision
+	recode cartaVisible = 1 11 cartaVisible
+	if suma <=11 
+		decision = 1 'Hit
+	elseif suma =12 and cartaVisible notbetween  4 6
+		decision = 1
+	elseif suma between 13 16 and cartaVisible between 7 11
+		decision = 1
+	else
+		decision = 0 'Stay
+	end
+end
+
+newcmd jugar isGanador
+	copy 4#1,13 deck 
+	shuffle deck deck 
+	print deck
+	take deck ( 1 3) misCartas
+	take deck (2 4) casaCartas
+	remove deck 1,4 deck
+	print deck
+	print misCartas
+	print casaCartas
+	resultado = 0
+	decision = 1
+	contarCartas misCartas resultado
+	take casaCartas 2 cartaVisible 'veo la carta de la casa
+	calcularJugada resultado cartaVisible decision
+	while resultado<21 and decision = 1
+		take deck 1 misCartas
+		remove 
+		calcularJugada resultado cartaVisible decision
+		contarCartas misCartas resultado
+		
+		
+	print decision	
+	
+end
+
+isGanador = 0
+
+jugar isGanador
+		
+
+
