@@ -1,6 +1,7 @@
 /*
 Kenneth Corrales Lizano carnet 2017151342
-La probabilidad del jugador de ganar es:
+Alejandro Tapia Alvarez carnet 2017116952
+La probabilidad del jugador de ganar es: 42,84%
 
 Codigo del Programa
 */
@@ -80,7 +81,7 @@ newcmd jugar isGanador
 end
 isGanador = 0
 total = 0 
-repeticiones = 1000000
+repeticiones = 10000000
 repeat repeticiones
 	jugar isGanador
 	total = total + isGanador
