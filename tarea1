@@ -30,7 +30,7 @@ newcmd calcularJugada suma cartaVisible decision
 		decision = 1 'Hit
 	elseif suma =12 and cartaVisible notbetween  4 6
 		decision = 1
-	elseif suma between 13 16 and cartaVisible between 7 11
+	elseif suma between 13 16 and cartaVisible between 7 13
 		decision = 1
 	else
 		decision = 0 'Stay
@@ -40,32 +40,59 @@ end
 newcmd jugar isGanador
 	copy 4#1,13 deck 
 	shuffle deck deck 
-	print deck
 	take deck ( 1 3) misCartas
 	take deck (2 4) casaCartas
 	remove deck 1,4 deck
-	print deck
-	print misCartas
-	print casaCartas
 	resultado = 0
+	resultadoCasa = 0
 	decision = 1
 	contarCartas misCartas resultado
 	take casaCartas 2 cartaVisible 'veo la carta de la casa
 	calcularJugada resultado cartaVisible decision
 	while resultado<21 and decision = 1
-		take deck 1 misCartas
-		remove 
-		calcularJugada resultado cartaVisible decision
+		take deck 1 nuevaCarta
+		remove deck 1 deck
+		copy misCartas nuevaCarta misCartas
 		contarCartas misCartas resultado
-		
-		
-	print decision	
+		calcularJugada resultado cartaVisible decision
+	end
+	contarCartas casaCartas resultadoCasa
+
+	while resultadoCasa<17
+		take deck 1 nuevaCarta
+		remove deck 1 deck
+		copy casaCartas nuevaCarta casaCartas
+		contarCartas casaCartas resultadoCasa
+	end
+	if resultado < 22 and ( resultado > resultadoCasa or resultadoCasa > 21)
+		isGanador = 1
+	else
+		isGanador = 0
+	end
+/*
+	print misCartas
+	print casaCartas
+	print resultado 
+	print resultadoCasa
+	print isGanador		
+*/
 	
 end
-
 isGanador = 0
+total = 0 
+repeticiones = 1000000
+repeat repeticiones
+	jugar isGanador
+	total = total + isGanador
+end
 
-jugar isGanador
+probabilidad = total/repeticiones
+	
+print total
+print probabilidad
+
+
+
 		
 
 
