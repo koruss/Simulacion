@@ -7,17 +7,18 @@ Codigo del Programa
 */
 clearoutput 
 
-
+'Cuenta la el valor de las cartas en una mano
 newcmd contarCartas mano resultado
 	resultado = 0 
 	recode mano > 10 10 manoTemp
 	sum manoTemp resultado
 	count manoTemp = 1 contAs
-	if contAs <> 0
+	if contAs <> 0 'Si hay ases
 		faltante = 21-resultado
 		divide faltante 10 faltante
 		integer floor faltante faltante
-		while contAs > 0 and faltante > 0
+		' Mientras hayan ases que valgan 1 y mientras falte más de 10 para llegar a 21 le agrega 10
+		while contAs > 0 and faltante > 0 
 			resultado = resultado +10
 			contAs = contAs - 1
 			faltante= faltante - 1
@@ -25,6 +26,7 @@ newcmd contarCartas mano resultado
 	end
 end
 
+'Utiliza la tabla dada por el profesor para calcular si el jugador debe pedir carta o quedarse
 newcmd calcularJugada suma cartaVisible decision
 	recode cartaVisible = 1 11 cartaVisible
 	if suma <=11 
@@ -38,6 +40,7 @@ newcmd calcularJugada suma cartaVisible decision
 	end
 end
 
+'Simula el juego de 21 con una baraja nueva cada vez
 newcmd jugar isGanador
 	copy 4#1,13 deck 
 	shuffle deck deck 
@@ -47,8 +50,9 @@ newcmd jugar isGanador
 	resultado = 0
 	resultadoCasa = 0
 	decision = 1
-	contarCartas misCartas resultado
+	contarCartas misCartas resultado 'cuenta el resultado de la mano
 	take casaCartas 2 cartaVisible 'veo la carta de la casa
+	'genera un loop para seguir jugando si es necesario
 	calcularJugada resultado cartaVisible decision
 	while resultado<21 and decision = 1
 		take deck 1 nuevaCarta
@@ -59,12 +63,15 @@ newcmd jugar isGanador
 	end
 	contarCartas casaCartas resultadoCasa
 
+	'genera un loop para simular las jugadas de la casa
 	while resultadoCasa<17
 		take deck 1 nuevaCarta
 		remove deck 1 deck
 		copy casaCartas nuevaCarta casaCartas
 		contarCartas casaCartas resultadoCasa
 	end
+	/*Si es menor a 22 y, o es mayor que la casa o el resultado de la casa es mayor a 21 gana
+	sino, pierde*/
 	if resultado < 22 and ( resultado > resultadoCasa or resultadoCasa > 21)
 		isGanador = 1
 	else
@@ -81,7 +88,7 @@ newcmd jugar isGanador
 end
 isGanador = 0
 total = 0 
-repeticiones = 10000000
+repeticiones = 1000000
 repeat repeticiones
 	jugar isGanador
 	total = total + isGanador
