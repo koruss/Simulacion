@@ -5,6 +5,7 @@ La probabilidad del jugador de ganar es: 42,84%
 
 Codigo del Programa
 */
+
 clearoutput 
 
 'Cuenta la el valor de las cartas en una mano
@@ -17,7 +18,7 @@ newcmd contarCartas mano resultado
 		faltante = 21-resultado
 		divide faltante 10 faltante
 		integer floor faltante faltante
-		' Mientras hayan ases que valgan 1 y mientras falte más de 10 para llegar a 21 le agrega 10
+		' Mientras hayan ases que valgan 1 y mientras falte mas de 10 para llegar a 21 le agrega 10
 		while contAs > 0 and faltante > 0 
 			resultado = resultado +10
 			contAs = contAs - 1
@@ -77,18 +78,12 @@ newcmd jugar isGanador
 	else
 		isGanador = 0
 	end
-/*
-	print misCartas
-	print casaCartas
-	print resultado 
-	print resultadoCasa
-	print isGanador		
-*/
+
 	
 end
 isGanador = 0
 total = 0 
-repeticiones = 1000000
+repeticiones = 100000
 repeat repeticiones
 	jugar isGanador
 	total = total + isGanador
@@ -98,7 +93,6 @@ probabilidad = total/repeticiones
 	
 print total
 print probabilidad
-
 
 
 		
