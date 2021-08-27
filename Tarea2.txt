@@ -1,0 +1,53 @@
+clearoutput
+
+newcmd tamanoFraccion num res
+	res = 1
+	t = num * 10
+	fraction t vfraction
+	while (vfraction > 0)
+		res = res+1	
+	end
+	print res
+
+end
+  
+newcmd explotar dec num lista
+	decMasUno = dec + 1
+	res = ()
+	t = num * 10^decMasUno
+	/* integer round t t */
+	integer truncate t t
+	/*
+	print num
+	print t
+	*/
+	integer truncate t t
+	numCiclos = decMasUno
+	repeat numCiclos
+		rem = t % 10
+		quo = t / 10
+		integer truncate quo quo
+		t = quo
+		concat rem res res
+	end
+	take res 1,dec lista
+end
+
+newcmd leerArchivo archivo cantNumeros
+	READ file "" archivo
+	size archivo cantNumeros
+end
+
+archivo = 0
+cantNumeros = 0
+res = 0
+decimales = ()
+leerArchivo archivo cantNumeros
+print archivo
+foreach numero archivo
+	tamanoFraccion numero res
+end
+
+
+
+ 
