@@ -4,8 +4,10 @@ newcmd tamanoFraccion num res
 	res = 1
 	t = num * 10
 	fraction t vfraction
-	while (vfraction > 0)
-		res = res+1	
+	while (vfraction > 0.00001)
+		res = res+1
+		t = t * 10
+		fraction t vfraction	
 	end
 	print res
 
@@ -45,7 +47,8 @@ decimales = ()
 leerArchivo archivo cantNumeros
 print archivo
 foreach numero archivo
-	tamanoFraccion numero res
+	explotar 5 0.12345678 res
+	print res
 end
 
 
