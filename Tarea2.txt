@@ -2,24 +2,19 @@
 Kenneth Corrales Lizano carnet 2017151342
 Alejandro Tapia Alvarez carnet 2017116952
 
+
+Para el documento n = 1000 con 4 decimales 
+el resultado del ChiCuadrado es igual a chiCuad: 33.54025725729156 
+
 Codigo del Programa
 */
 
 clearoutput
 
-newcmd tamanoFraccion num res
-	res = 1
-	t = num * 10
-	fraction t vfraction
-	while (vfraction > 0.00001)
-		res = res+1
-		t = t * 10
-		fraction t vfraction	
-	end
-	print res
 
-end
-  
+/*
+Esta funcion toma un numero y convierte su parte decimal en una lista 
+*/ 
 newcmd explotar dec num lista
 	decMasUno = dec + 1
 	res = ()
@@ -42,11 +37,17 @@ newcmd explotar dec num lista
 	take res 1,dec lista
 end
 
+/*
+Lee un archivo
+*/
 newcmd leerArchivo archivo cantNumeros
 	READ file "" archivo
 	size archivo cantNumeros
 end
 
+/*
+Esta funcion se encarga de actualizar la cantidad de huecos de fo con un numero
+*/
 newcmd aumentarfo fo numero concatenacion
 	TAGS concatenacion =numero indexes
 	size indexes cantDigitos
@@ -63,7 +64,32 @@ newcmd aumentarfo fo numero concatenacion
 	end	
 end
 
+/*
+Calcula la lista de las frecuencias esperadas
+*/
+newcmd calcularfe fe sumatoria tamanioTotal
+	x=0
+	power 0.9 x powerResult
+	e = 0.1 * powerResult * sumatoria
+	x=x+1
+	while (x < tamanioTotal - 1) and (e > 5)  
+		copy fe e fe
+		power 0.9 x powerResult
+		e = 0.1 * powerResult  * sumatoria		
+		x= x+1		 
+	end
+end
+
+
+
+/*
+Programa Principal
+*/
 input decimales 'Ingrese la Cantidad de Decimales'
+
+/*
+Variables utilizadas
+*/
 archivo = 0
 cantNumeros = 0
 res = 0
@@ -71,23 +97,44 @@ leerArchivo archivo cantNumeros
 concatenacion=()
 listaNum  = (0 1 2 3 4 5 6 7 8 9)
 cantDigitos = 0
+fe = ()
 
 print archivo
+
+'Genera la lista de todos los decimales concatenados
 foreach numero archivo
 	explotar decimales numero res
 	copy concatenacion res concatenacion
 end
 
+'Genera la lista de fo vacia con ceros
 size concatenacion tamanioTotal
 copy tamanioTotal#0 fo
 
+'Por cada numero revisa el tamanio de los hueco y aumenta fo respectivamente
 foreach numero listaNum
 	aumentarfo fo numero concatenacion
 end
- 
-print fo
 
 
+sum fo sumatoria
 
+calcularfe fe sumatoria tamanioTotal 
 
+print fe
+
+size fe tamaniofe
+
+take fo 1,tamaniofe fo
+
+xMax = tamaniofe - 1 
+copy 0,xMax bin
+
+'imprime la tabla final de los valores utilizados
+print table  bin%8.0F fo%8.8F fe%8.8F
+
+'Calcula el valor del chiCuadrado
+chiSquare fo fe chiCuad
+
+print chiCuad
 
