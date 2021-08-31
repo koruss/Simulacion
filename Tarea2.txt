@@ -1,3 +1,10 @@
+/*
+Kenneth Corrales Lizano carnet 2017151342
+Alejandro Tapia Alvarez carnet 2017116952
+
+Codigo del Programa
+*/
+
 clearoutput
 
 newcmd tamanoFraccion num res
@@ -40,17 +47,19 @@ newcmd leerArchivo archivo cantNumeros
 	size archivo cantNumeros
 end
 
+
+input decimales 'Ingrese la Cantidad de Decimales'
 archivo = 0
 cantNumeros = 0
 res = 0
-decimales = ()
 leerArchivo archivo cantNumeros
+fo = ()
 print archivo
 foreach numero archivo
-	explotar 5 0.12345678 res
-	print res
+	explotar decimales numero res
+	copy fo res fo
+	print fo
 end
 
 
 
- 
