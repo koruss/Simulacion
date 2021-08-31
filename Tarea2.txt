@@ -47,19 +47,47 @@ newcmd leerArchivo archivo cantNumeros
 	size archivo cantNumeros
 end
 
+newcmd aumentarfo fo numero concatenacion
+	TAGS concatenacion =numero indexes
+	size indexes cantDigitos
+	i=1
+	while i <cantDigitos
+		take indexes i selectedData
+		nextPos=i+1
+		take indexes nextPos nextData 
+		resultado = nextData - selectedData
+		take fo resultado hueco
+		hueco = hueco + 1
+		put hueco resultado fo
+		i=i+1
+	end	
+end
 
 input decimales 'Ingrese la Cantidad de Decimales'
 archivo = 0
 cantNumeros = 0
 res = 0
 leerArchivo archivo cantNumeros
-fo = ()
+concatenacion=()
+listaNum  = (0 1 2 3 4 5 6 7 8 9)
+cantDigitos = 0
+
 print archivo
 foreach numero archivo
 	explotar decimales numero res
-	copy fo res fo
-	print fo
+	copy concatenacion res concatenacion
 end
+
+size concatenacion tamanioTotal
+copy tamanioTotal#0 fo
+
+foreach numero listaNum
+	aumentarfo fo numero concatenacion
+end
+ 
+print fo
+
+
 
 
 
