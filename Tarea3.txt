@@ -1,0 +1,172 @@
+/*
+Kenneth Corrales Lizano carnet 2017151342
+Alejandro Tapia Alvarez carnet 2017116952
+
+
+Para el documento n = 1000 con 4 decimales 
+el resultado del ChiCuadrado es igual a chiCuad: 33.54025725729156 
+
+Codigo del Programa
+*/
+
+clearoutput
+
+
+/*
+Esta funcion toma un numero y convierte su parte decimal en una lista 
+*/ 
+newcmd explotar dec num lista
+   decMasUno = dec + 1
+   res = ()
+   t = num * 10^decMasUno
+   /* integer round t t */
+   integer truncate t t
+	/*
+	print num
+	print t
+	*/
+   integer truncate t t
+   numCiclos = decMasUno
+   repeat numCiclos
+      rem = t % 10
+      quo = t / 10
+      integer truncate quo quo
+      t = quo
+      concat rem res res
+   end
+   take res 1,dec lista
+end
+
+/*
+Lee un archivo
+*/
+newcmd leerArchivo archivo cantNumeros
+   READ file "" archivo
+   size archivo cantNumeros
+end
+
+/*
+Esta funcion se encarga de actualizar la cantidad de huecos de fo con un numero
+*/
+newcmd aumentarfo fo numero concatenacion
+   TAGS concatenacion =numero indexes
+   size indexes cantDigitos
+   i=1
+   while i <cantDigitos
+      take indexes i selectedData
+      nextPos=i+1
+      take indexes nextPos nextData
+      resultado = nextData - selectedData
+      take fo resultado hueco
+      hueco = hueco + 1
+      put hueco resultado fo
+      i=i+1
+   end
+end
+
+
+/*
+Al inicio se asume que todas las cartas son diferentes
+*/
+newcmd procesarMano mano fo
+   	pos = 1
+	'Caso de un par y full house
+   	multiples  mano =2 repetidos
+   	if(repetidos = 1)
+			'Caso Full House
+     		multiples mano =3 repetidos
+      		if (repetidos =1)
+			pos = 5
+		else
+			pos =2
+		end
+	elseif( repetidos =2)
+		pos =3
+	else
+		multiples mano =3 repetidos
+		if (repetidos = 1)
+			pos =4
+		else 
+			multiples mano =4 repetidos
+			if (repetidos = 1)
+				pos =6
+			else
+			
+				multiples mano =5 repetidos
+				if (repetidos = 1)
+					pos =7
+				end
+			end
+         	end
+         
+         
+         
+     	 end
+	take fo pos temp
+	temp = temp +1
+	put temp pos fo     
+end
+   
+   
+/*
+Programa Principal
+*/
+   
+   
+/*
+Variables utilizadas
+*/
+   decimales = 5
+   archivo = 0
+   cantNumeros = 0
+   res = 0
+   leerArchivo archivo cantNumeros
+   pX = (0.3024 0.5040 0.1080 0.0720 0.0090 0.0045 0.0001)
+   copy 7#0 fo
+   
+
+
+   
+'Genera la lista de todos los decimales concatenados
+   foreach numero archivo
+      explotar decimales numero res
+      procesarMano res fo
+   end
+ 
+print fo
+'Genera la lista de fo vacia con ceros
+
+
+
+
+
+   
+/*
+'Por cada numero revisa el tamanio de los hueco y aumenta fo respectivamente
+foreach numero listaNum
+	aumentarfo fo numero concatenacion
+end
+
+
+sum fo sumatoria
+
+calcularfe fe sumatoria tamanioTotal 
+
+print fe
+
+size fe tamaniofe
+
+take fo 1,tamaniofe fo
+
+xMax = tamaniofe - 1 
+copy 0,xMax bin
+
+'imprime la tabla final de los valores utilizados
+print table  bin%8.0F fo%8.8F fe%8.8F
+
+'Calcula el valor del chiCuadrado
+chiSquare fo fe chiCuad
+
+print chiCuad
+
+*/
