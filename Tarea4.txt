@@ -1,0 +1,102 @@
+/*
+Kenneth Corrales Lizano carnet 2017151342 
+Alejandro Tapia Alvarez carnet 2017116952 
+*/
+
+/*
+Para el documento AAA el valor de ChiCuadrado con 5 intervalos es = 19.293293293293292
+Para el docuemnto BBB el valor de ChiCuadrado con 5 intervalos es = 33.60760760760762
+*/
+
+clearoutput
+
+
+/*
+Lee un archivo
+*/
+newcmd leerArchivo archivo cantNumeros
+	READ file "" archivo
+	size archivo cantNumeros
+end
+/*
+calcula las posiciones y les suma 1 al intervalo donde cae
+*/
+newcmd calcularfo posX posY arreglo intervalos
+	tempX = posX * intervalos
+	tempY = posY * intervalos
+	integer ceiling tempX tempX
+	integer floor tempY tempY
+	posicion = tempY * intervalos  + tempX
+	take arreglo posicion acumulado
+	acumulado= acumulado + 1
+	put acumulado posicion arreglo
+end
+
+
+/*
+Calcula la frecuencia esperada
+*/
+newcmd calcularfe intervalos cantNumeros fe
+	fe = (cantNumeros - 1) / (intervalos * intervalos)
+end
+	
+
+/*
+Programa Principal
+*/
+
+'Variables Utilizadas
+archivo = 0
+cantNumeros = 0
+cont=1
+posX=0
+posY=0
+fe = 0
+chiCuad = 0
+input intervalos 'Ingrese la cantidad de intervalos'
+tamanioMatriz= intervalos * intervalos
+
+
+
+
+
+
+copy tamanioMatriz#0 arreglo
+
+leerArchivo archivo cantNumeros
+
+'Ciclo para recorrer el arreglo de todos los numeros 
+while cont < cantNumeros 
+	take archivo cont posX
+	cont = cont +1
+	take archivo cont posY
+	calcularfo posX posY arreglo intervalos
+end 
+
+calcularfe intervalos cantNumeros fe
+
+chiSquare arreglo fe chiCuad
+
+print
+
+'Ciclo para imprimir la tabla 
+
+maximo = tamanioMatriz
+minimo = tamanioMatriz - intervalos + 1 
+while minimo > 0 
+	take arreglo minimo,maximo arregloImprimir 
+	print arregloImprimir%6F
+	maximo = maximo - intervalos
+	minimo = minimo - intervalos
+end
+print
+
+print chiCuad
+
+
+
+
+
+
+
+
