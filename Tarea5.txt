@@ -1,0 +1,134 @@
+/*
+Kenneth Corrales Lizano carnet 2017151342 
+Alejandro Tapia Alvarez carnet 2017116952
+
+El valor de chi cuadrado con intervalos de 1 para el archivo de 10000 es -> chiCuad: 33.2837323555378
+El valor de chi cuadrado con intervalos de 2 para el archivo de 10000 es -> chiCuad: 16.4209843315095
+ 
+*/
+
+clearoutput
+
+/*
+Lee un archivo
+*/
+newcmd leerArchivo archivo cantNumeros
+	READ file "" archivo
+	size archivo cantNumeros
+end
+
+newcmd calcularFo arreglo intervalos fo
+	foreach numero arreglo
+		pos = numero / intervalos
+		integer ceiling pos pos
+		take fo pos temp
+		temp = temp + 1
+		put temp pos fo
+	end
+end
+
+'Calcula la probabilidad
+'de una distribución normal dentro del rango
+newcmd probNormalRango limInf limSup promedio desviación prob       
+	normalprob limInf promedio desviación probInf       
+	normalprob limSup promedio desviación probSup       
+	prob = probSup - probInf
+end
+
+newcmd calcularFe binInicio binFinal desv promedio cantIntervalos cantNumeros pe Fe
+	cont = 1
+	peTemp = 0
+	while cont <= cantIntervalos
+		take binInicio cont limInf
+		take binFinal cont limSup	
+		probNormalRango limInf limSup promedio desv peTemp
+		copy pe peTemp pe
+		peTemp = peTemp * cantNumeros
+		copy Fe peTemp Fe
+		cont = cont +1 
+	end
+end
+
+
+/*
+Esta funcion se encarga de evitar que el chi cuadrado se sobre estime
+eliminando los intervalos donde las frecuencias observadas den 0 y las 
+frecuencias esperadas sean menores que 5
+*/
+newcmd purge binInicio binFinal cantIntervalos fo fe pe
+	cont =1 
+	foTemp = 0
+	listaPosBorrar = ()
+	while cont <= cantIntervalos
+		take fo cont foTemp
+		take fe cont feTemp
+		if(foTemp = 0 or feTemp<5  )
+			copy listaPosBorrar cont listaPosBorrar
+		end
+		cont = cont +1
+	end
+
+	remove fo listaPosBorrar fo
+	remove binInicio listaPosBorrar binInicio
+	remove binFinal listaPosBorrar binFinal
+	remove fe listaPosBorrar fe
+	remove pe listaPosBorrar pe	
+end
+
+
+/*
+
+
+Programa Principal
+*/
+
+'Variables Uilitizadas
+
+archivo = 0
+cantNumeros =0
+Fe = ()
+pe = ()
+
+input intervalos 'Ingrese la cantidad de Intervalos'
+leerArchivo archivo cantNumeros
+max archivo numeroMax
+
+'Se obtiene la media y la desviacion estandar
+mean archivo promedio
+stdev archivo desvEstandar
+
+'Se obtiene cuantos intervalos se utilizaran
+cantIntervalos = numeroMax / intervalos
+integer ceiling cantIntervalos cantIntervalos
+
+
+'Se crean los arreglos con los limites inferiores y superiores
+copy 1,cantIntervalos  binInicio
+copy 1,cantIntervalos  binFinal
+SUBTRACT binInicio 1 binInicio
+multiply binInicio intervalos binInicio
+multiply binFinal intervalos binFinal
+
+'Se llama a la funcion que calcula el vector de frecuencias observadas
+copy cantIntervalos#0 fo
+calcularFo archivo intervalos fo
+
+'Se llama a la funcion que calcula el vectore de frecuencias esperadas y probabilidades esperadas
+calcularFe binInicio binFinal desvEstandar promedio cantIntervalos cantNumeros pe Fe
+
+purge binInicio binFinal cantIntervalos fo Fe pe
+'Se calcula ChiCuadrado
+chiSquare fo fe chiCuad
+
+'Se imprime los resultados
+print promedio
+print desvEstandar
+print
+print table binInicio binFinal fo 
+print
+print table binInicio pe%8.4F Fe%8.4F
+print
+print chiCuad
+
+
+
