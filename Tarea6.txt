@@ -1,0 +1,155 @@
+/*
+Kenneth Corrales Lizano carnet 2017151342 
+Alejandro Tapia Alvarez carnet 2017116952
+
+El resultado para intervalos de tamano 3 en el doc con 10000 elementos es: 0.01013368317178065
+ 
+*/
+
+clearoutput
+
+/*
+Lee un archivo
+*/
+newcmd leerArchivo archivo cantNumeros
+	READ file "" archivo
+	size archivo cantNumeros
+end
+
+
+
+
+/*
+Calcula la Frecuencia observada y la guarda en el arreglo fo
+*/
+newcmd calcularFo fo arreglo intervalos
+	foreach numero arreglo
+		pos = numero / intervalos
+		integer floor pos pos
+		pos = pos + 1 
+		take fo pos temp
+		temp = temp + 1
+		put temp pos fo
+	end
+end
+/*Calcula la acumulada de la frecuencia observada y la guarda en el arreglo foa*/
+newcmd calcularFoa fo foa cantIntervalos
+	cont =2
+	take fo 1 value
+	put value 1 foa
+	while cont <= cantIntervalos
+		cont2 = cont - 1
+		take foa cont2 valueAnterior
+		take fo cont valueActual
+		acumulado = valueAnterior + valueActual
+		put acumulado cont foa
+		cont = cont + 1
+	end
+end
+/* Calcula la Probabilidad observada acumulada y la guarda en el arreglo poa*/
+newcmd calcularPoa foa poa cantDigitos
+	cont = 1
+	forEach numero foa
+		result = numero / cantDigitos
+		put result cont poa
+		cont = cont + 1
+	end
+end
+
+/* Calcula la Probabilidad esperada acumuladad y la guarda en el arreglo pea */ 
+newcmd calcularPea cantIntervalos intervalos pea promedio
+	incremento = intervalos
+	cont = 1 
+	while cont <= cantIntervalos
+		exponente = - incremento / promedio
+		exp exponente potencia
+		resultado = 1 - potencia
+		put resultado cont pea
+		cont = cont + 1
+		incremento = incremento + intervalos
+	end
+end
+
+/* Calcula la diferencia entre poa y pea y lo guarda en el arreglo dif ademas almacena la diferencia mayor en resultado */
+newcmd calcularDif poa pea cantIntervalos dif resultado 
+	cont = 1
+	while cont <= cantIntervalos
+		take poa cont temp1
+		take pea cont temp2
+		calc = temp1 - temp2
+		abs calc calc
+		if calc > resultado
+			resultado = calc
+		end
+		put calc cont dif 
+		cont = cont + 1 
+	end
+end
+
+/* Se utiliza para limpiar los intervalos que no aportan elementos */ 
+newcmd purgar inicio fo foa poa pea dif
+	tags fo = 0 purga
+	remove inicio purga inicio
+	remove fo purga fo
+	remove foa purga foa
+	remove poa purga poa
+	remove pea purga pea
+	remove dif purga dif
+end	
+
+
+	
+/*
+Programa Principal
+*/
+'Variables Utilizadas
+input intervalos 'Ingrese la cantidad de intervalos'
+leerArchivo archivo cantNumeros
+
+/*Por conveniencia un buen calculo de la cantidad de intervalos es la raiz cuadrada de la cantidad de elementos*/
+sqrt cantNumeros cantIntervalos
+integer ceiling cantIntervalos cantIntervalos
+
+temp = cantIntervalos - 1 
+copy 0,temp inicio
+multiply inicio 3 inicio
+copy cantIntervalos#0 fo
+copy cantIntervalos#0 poa
+copy cantIntervalos#0 foa
+copy cantIntervalos#0 pea
+copy cantIntervalos#0 dif
+
+resultado = 0
+
+calcularFo fo archivo intervalos
+
+calcularFoa fo foa cantIntervalos
+
+calcularPoa foa poa cantNumeros
+
+mean archivo promedio
+
+calcularPea cantIntervalos intervalos pea promedio
+
+purgar inicio fo foa poa pea dif
+'Si se redujo la cantidad de intervalos
+size fo cantIntervalos
+calcularDif poa pea cantIntervalos dif resultado 
+
+
+print table inicio%8.0F fo%8.4F foa%8.4F poa%8.4F pea%8.4F dif%8.4F
+
+
+print resultado
+
+
+
+
+
+
+
+
+
+
+
+
