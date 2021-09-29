@@ -2,6 +2,7 @@
 Kenneth Corrales Lizano carnet 2017151342 
 Alejandro Tapia Alvarez carnet 2017116952
 
+El resultado para intervalos de tamano 2 en el doc con 10000 elementos es: 0.009480755157128484
 El resultado para intervalos de tamano 3 en el doc con 10000 elementos es: 0.01013368317178065
  
 */
