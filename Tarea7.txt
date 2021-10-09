@@ -1,0 +1,50 @@
+/*
+Kenneth Corrales Lizano carnet 2017151342 
+Alejandro Tapia Alvarez carnet 2017116952
+
+El resultado para intervalos de tamano 2 en el doc con 10000 elementos es: 0.009480755157128484
+El resultado para intervalos de tamano 3 en el doc con 10000 elementos es: 0.01013368317178065
+ 
+*/
+
+/*
+
+Funcion Inicial
+f(x) =	0 si x < 0
+	(3/2)*(x^2 - 2*x + 1) si 0 <= x < 1 
+	x/3	si 1 <= x < 2
+
+La acumulada 
+ 	0				x<0
+f(x) =	(1/2) x(3 - 3x + x^2)		0<=x<1
+	1/2  +  1/6   (-1 + x^2)		1<= x <= 2
+	1				X>2
+
+
+Rangos
+* (1/2) x(3 - 3x + x^2)  0 <= r < 1/2
+
+* 1/2  +  1/6   (-1 + x^2) 1/2<= r <=1
+
+
+La inversa
+
+-		 
+/*
+
+*/
+clearoutput
+
+
+
+/*
+Programa Principal
+*/
+
+
+'Variables utilizadas
+
+input muestra "Ingrese la muestra"
+
+input intervalos "Ingrese el numero de Intervalos"
+
