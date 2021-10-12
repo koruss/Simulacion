@@ -2,9 +2,6 @@
 Kenneth Corrales Lizano carnet 2017151342 
 Alejandro Tapia Alvarez carnet 2017116952
  
-*/
-
-/*
 
 Funcion Inicial
 f(x) =	0 si x < 0
@@ -29,11 +26,8 @@ f(x) =	0   		si x < 0
 	(2x-1)^(1/3) +1  si 0 <= x < 1/2 
 	(6x-2)^(1/2)	si 1/2 <= x < 1
 
-
--		 
-/*
-
 */
+
 clearoutput
 
 newcmd calcularResultadoInversa arregloMuestras arregloResultado
@@ -72,10 +66,9 @@ end
 Programa Principal
 */
    
-   
-'Variables utilizadas
-   input muestra "Ingrese la muestra"
-   input n "Ingrese el numero de Intervalos"
+
+ input muestra 'Ingrese la muestra'
+   input n 'Ingrese el numero de Intervalos'
    copy n#0 intervalos
    resultado = ()
    uniform muestra 0 1 arregloMuestras
