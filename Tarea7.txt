@@ -1,9 +1,6 @@
 /*
 Kenneth Corrales Lizano carnet 2017151342 
 Alejandro Tapia Alvarez carnet 2017116952
-
-El resultado para intervalos de tamano 2 en el doc con 10000 elementos es: 0.009480755157128484
-El resultado para intervalos de tamano 3 en el doc con 10000 elementos es: 0.01013368317178065
  
 */
 
@@ -23,7 +20,6 @@ f(x) =	(1/2) + (1/2)*(X-1)^3		0<=x<1
 
 Rangos
 * (1/2) x(3 - 3x + x^2)  0 <= r < 1/2
-
 * 1/2  +  1/6   (-1 + x^2) 1/2<= r <=1
 
 
@@ -40,16 +36,61 @@ f(x) =	0   		si x < 0
 */
 clearoutput
 
-
-
+newcmd calcularResultadoInversa arregloMuestras arregloResultado
+   foreach muestra arregloMuestras
+      if muestra <= 0
+         resultado = 0
+      elseif muestra < 0.5
+         resultado = 2 * muestra - 1
+         abs resultado resultado
+         resultado = resultado ^ (1/3)
+         resultado = resultado * -1 + 1
+      elseif muestra < 1
+         resultado = 6 * muestra - 2
+         sqrt resultado resultado
+         
+      elseif muestra > 1
+         resultado = 1
+      end
+      copy arregloResultado resultado arregloResultado 
+  end
+end
+   
+   newcmd calcularIntervalos resultado intervalos n
+      posicion = resultado * n
+      integer ceiling posicion posicion
+      take intervalos posicion temp
+      temp = temp + 1
+      put temp posicion intervalos
+   end
+   
+   
+   
+   
+   
 /*
 Programa Principal
 */
-
-
+   
+   
 'Variables utilizadas
+   input muestra "Ingrese la muestra"
+   input n "Ingrese el numero de Intervalos"
+   copy n#0 intervalos
+   resultado = ()
+   uniform muestra 0 1 arregloMuestras
+   tamanioIntervalo = 1 / n
+   
+   calcularResultadoInversa arregloMuestras resultado
 
-input muestra "Ingrese la muestra"
 
-input intervalos "Ingrese el numero de Intervalos"
-
+   histogram binsize tamanioIntervalo  resultado  
+   
+   
+   
+   
+   
+   
+   
+   
+   
