@@ -1,0 +1,145 @@
+/*
+Kenneth Corrales Lizano carnet 2017151342 
+Alejandro Tapia Alvarez carnet 2017116952
+*/
+
+
+clearoutput
+/*
+Esta es la funcion que se puede intercambiar por cualquir otra de las de la tarea
+*/
+newcmd fun x y  
+	y = (x^2)/9
+end
+
+
+/*
+Funcion Para calcular el area con la regla de Simpson
+*/
+newcmd calcularSimpson limInf limSup nSimpson resultado
+	sumatoria = 0
+	h = (limSup - limInf) / nSimpson
+	fun limInf sumatoria
+	limInf = limInf + h
+	bool = 0
+	while ( limInf < limSup)
+		fun limInf resultado
+		limInf = limInf + h
+		if( bool = 0)
+			sumatoria =  (4 * resultado) + sumatoria
+			bool = 1
+		else
+			sumatoria =  (2 * resultado) + sumatoria
+			bool = 0
+		end
+	end
+	fun limSup temp
+	sumatoria = sumatoria + temp
+	
+	resultado = sumatoria * (h / 3)
+end 	
+
+
+/*
+Funcion para calcular el punto medio de un intervalo
+*/	
+newcmd calcularPtosMedios Inf Sup arreglo
+	inv = (Sup +Inf ) / 2
+	copy arreglo inv arreglo  
+
+end
+
+
+/*
+Funcion para calcular el valor correspondiente a la funcion inversa
+*/
+newcmd calcularInversa muestra fxAcum ptos  tamanioArrArea resultado
+	cont = 1
+	while ( cont < tamanioArrArea )
+		take fxAcum cont AcumActual
+		if ( muestra <= AcumActual)
+			break
+		end
+		cont = cont + 1
+	end
+	take ptos cont resultado	
+	
+end	
+
+
+
+/*Programa Principal*/
+
+
+/*
+Variable Utilizadas
+*/
+input "Límite Inferior                 :" limInf 
+input "Límite Superior                 :" limSup
+input "Número intervalos               :" n
+input "Particiones Simpson (número par):" nSimpson
+input "Tamaño de Muestra               :" tamañoMuestra 
+
+arreglo = ()
+fx = ()
+fxAcum = ()
+ptos = ()
+arregloInversa = ()
+muestras = ()
+
+h = (limSup - limInf) / n
+
+
+isPar = nSimpson % 2
+
+
+'Si es par inmediatamente se sale
+if isPar = 1
+	print "La cantidad de Particiones NO es par"
+else
+	cont = limInf 
+	while (cont <= limSup)
+		copy arreglo cont arreglo
+		cont = cont + h
+	end
+	print arreglo
+	cont = 1
+	tamanio = n + 1
+	while (cont < tamanio )
+		resultado = 0
+		take arreglo cont tempInf
+		cont = cont + 1
+		take arreglo cont tempSup
+		print tempInf tempSup 
+		calcularPtosMedios tempInf tempSup ptos
+		calcularSimpson tempInf tempSup nSimpson resultado
+
+		copy fx resultado fx
+		size fxAcum tamanioArrArea
+		if (tamanioArrArea = 0 )
+			copy resultado fxAcum
+		
+		else
+			take fxAcum tamanioArrArea Acum
+			Acum = resultado + Acum
+			copy fxAcum Acum fxAcum
+
+		end
+		
+	end
+	cont = 1 
+
+	print table fx%8.4F ptos%8.4F
+	print table fxAcum%8.4F ptos%8.4F	
+	
+	uniform tamañoMuestra 0 1 arregloMuestras
+	size fxAcum tamanioArrArea
+	foreach muestra arregloMuestras
+		calcularInversa muestra fxAcum ptos tamanioArrArea resultadoInv
+		copy muestras resultadoInv muestras
+	end
+	histogram binsize h muestras
+end
+
+
+
