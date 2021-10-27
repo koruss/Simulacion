@@ -1,0 +1,119 @@
+/*
+Kenneth Corrales Lizano carnet 2017151342 
+Alejandro Tapia Alvarez carnet 2017116952
+
+La tabla va aqui
+
+*/
+
+clearoutput
+newcmd aumentarCosto
+end
+
+newcmd calcularDias diasRestantes
+	uniform 1 0 1 temp
+	if temp < 0.30
+		diasRestantes = 1
+	elseif temp <0.70
+		diasRestantes = 2 
+	else 
+		diasRestantes = 3
+	end	
+end
+
+/*
+bool = 1 significa que se anade una cantidad q 
+bool = 0 solo se reduce 
+*/ 
+newcmd actualizarInventario Ini Final inventario  Venta bool dia q
+	
+	poisson 1 7 ventaDia
+	put ventaDia dia Venta
+	inventario = inventario - ventaDia
+	put inventario dia Final
+	temp2 = dia + 1
+	if bool = 1
+		if temp2 < 366
+			inventario = inventario + q
+			put inventario temp2 Ini
+		end
+	else
+		put inventario temp2 Ini 
+	end
+end	
+		 
+		
+		
+		
+	
+
+newcmd calcularInventario q r Ini PedirQ Dias Venta Final N
+	costoFijo = 0
+	costoInventario = 0
+	costoPenalizacion = 0
+	costoTotal = 0
+	
+
+	inventario = q
+	diasRestantes = 0
+ 
+	copy Ini q Ini
+	foreach dia N 
+		if inventario < r ' Si queda poco inventario 
+			put 1 dia PedirQ 'Se pide inventario
+			if diasRestantes = 0	
+				calcularDias diasRestantes 
+				put diasRestantes dia dias
+				if diasRestantes = 1
+					actualizarInventario Ini Final inventario  Venta 1 dia q
+				else
+					actualizarInventario Ini Final inventario  Venta 0 dia q
+				end
+
+			else
+				diasRestantes = diasRestantes - 1
+				put diasRestantes dia dias
+				if diasRestantes = 1
+					actualizarInventario Ini Final inventario  Venta 1 dia q
+
+				else
+					actualizarInventario Ini Final inventario  Venta 0 dia q
+				end
+			end
+		else
+			
+			put 0 dia PedirQ 'Se pide inventario
+			put 0 dia Dias
+			actualizarInventario Ini Final inventario  Venta 0 dia q
+		end
+	end
+
+end
+
+/*
+Programa Principal
+*/
+
+
+
+costoFijo = 0
+costoInventario = 0
+costoPenalizacion = 0
+costoTotal = 0
+
+
+Ini = ()
+PedirQ = ()
+Dias = ()
+Venta = ()
+Final = ()
+copy 1,365 N
+
+q = 50
+r = 20
+calcularInventario q r Ini PedirQ Dias Venta Final N
+
+print table N%8.0F Ini%8.0F PedirQ%8.0F Dias%8.0F Venta%8.0F Final%8.0F
+
+
+
