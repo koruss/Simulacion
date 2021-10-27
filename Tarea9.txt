@@ -25,11 +25,17 @@ end
 bool = 1 significa que se anade una cantidad q 
 bool = 0 solo se reduce 
 */ 
-newcmd actualizarInventario Ini Final inventario  Venta bool dia q
+newcmd actualizarInventario Ini Final inventario  Venta bool dia q costoInventario costoPenalizacion
 	
 	poisson 1 7 ventaDia
 	put ventaDia dia Venta
 	inventario = inventario - ventaDia
+	if inventario > 0
+		costoInventario = costoInventario + inventario
+	else
+		tmp = -1 * inventario 
+		costoPenalizacion = costoPenalizacion + tmp
+	end
 	put inventario dia Final
 	temp2 = dia + 1
 	if bool = 1
@@ -38,7 +44,9 @@ newcmd actualizarInventario Ini Final inventario  Venta bool dia q
 			put inventario temp2 Ini
 		end
 	else
-		put inventario temp2 Ini 
+		if temp2 < 366
+			put inventario temp2 Ini
+		end
 	end
 end	
 		 
@@ -47,11 +55,7 @@ end
 		
 	
 
-newcmd calcularInventario q r Ini PedirQ Dias Venta Final N
-	costoFijo = 0
-	costoInventario = 0
-	costoPenalizacion = 0
-	costoTotal = 0
+newcmd calcularInventario q r Ini PedirQ Dias Venta Final N costoFijo costoInventario costoPenalizacion costoTotal
 	
 
 	inventario = q
@@ -61,33 +65,39 @@ newcmd calcularInventario q r Ini PedirQ Dias Venta Final N
 	foreach dia N 
 		if inventario < r ' Si queda poco inventario 
 			put 1 dia PedirQ 'Se pide inventario
-			if diasRestantes = 0	
+			
+			if diasRestantes = 0
+				costoFijo = costoFijo + 100	
 				calcularDias diasRestantes 
 				put diasRestantes dia dias
 				if diasRestantes = 1
-					actualizarInventario Ini Final inventario  Venta 1 dia q
+					actualizarInventario Ini Final inventario  Venta 1 dia q costoInventario costoPenalizacion
+					diasRestantes = 0
 				else
-					actualizarInventario Ini Final inventario  Venta 0 dia q
+					actualizarInventario Ini Final inventario  Venta 0 dia q costoInventario costoPenalizacion
 				end
 
 			else
 				diasRestantes = diasRestantes - 1
 				put diasRestantes dia dias
 				if diasRestantes = 1
-					actualizarInventario Ini Final inventario  Venta 1 dia q
+					actualizarInventario Ini Final inventario  Venta 1 dia q costoInventario costoPenalizacion
+					diasRestantes = 0
 
 				else
-					actualizarInventario Ini Final inventario  Venta 0 dia q
+					actualizarInventario Ini Final inventario  Venta 0 dia q costoInventario costoPenalizacion
 				end
 			end
 		else
 			
-			put 0 dia PedirQ 'Se pide inventario
+			put 0 dia PedirQ 
 			put 0 dia Dias
-			actualizarInventario Ini Final inventario  Venta 0 dia q
+			actualizarInventario Ini Final inventario  Venta 0 dia q costoInventario costoPenalizacion
 		end
 	end
-
+	costoInventario = costoInventario * 20
+	costoPenalizacion = costoPenalizacion * 50
+	costoTotal = costoInventario + costoPenalizacion + costoFijo
 end
 
 /*
@@ -107,13 +117,20 @@ PedirQ = ()
 Dias = ()
 Venta = ()
 Final = ()
-copy 1,365 N
+copy 1,30 N
 
 q = 50
 r = 20
-calcularInventario q r Ini PedirQ Dias Venta Final N
+calcularInventario q r Ini PedirQ Dias Venta Final N costoFijo costoInventario costoPenalizacion costoTotal
 
 print table N%8.0F Ini%8.0F PedirQ%8.0F Dias%8.0F Venta%8.0F Final%8.0F
+
+print costoFijo
+print costoInventario 
+print costoPenalizacion
+print costoTotal
+
+
 
 
 
