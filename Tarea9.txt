@@ -2,7 +2,35 @@
 Kenneth Corrales Lizano carnet 2017151342 
 Alejandro Tapia Alvarez carnet 2017116952
 
-La tabla va aqui
+Tabla de valores realizado con 100 000 iteraciones
+Q/R		10		20		30		40		50		60		70		80		90		100
+100	310060.6388	363389.1024	430892.6676	502564.4707	574871.9045	647508.5494	720439.668	793651.1806	867085.055	940195.7546
+
+90	275800.9239	327292.1223	394382.3654	466256.3749	538713.2919	611414.8998	684529.6744	757901.0754	830815.664	
+
+80	242402.2719	291401.4801	358066.6984	430000.2031	502603.1439	575484.5738	648658.1626	721598.7098		
+
+70	210009.1678	255873.7499	321908.2538	393878.6248	466654.1792	539730.1496	612499.5144			
+
+60	179236.8735	220819.9421	285983.5126	357983.5031	430908.9631	503705.6392				
+
+50	150940.1405	186512.8771	250358.5116	322389.8982	395129.8408					
+
+40	126989.5505	153472.9277	215288.7996	286995.7393						
+
+30	111735.6406	122850.5259	180925.6833							
+
+20	129120.8924	99835.2275								
+
+10	6749333.088									
+
+
+Por lo tanto, los mejores valores de q y r respectivamente son: q=20 r=20
+
+
+
+
+
 
 */
 
@@ -104,50 +132,9 @@ newcmd calcularInventario q r Ini PedirQ Dias Venta Final N costoFijo costoInven
 end
 
 
-
-/*
-Programa de Experimentos
-*/
-newcmd experimentos
-   copy 100 90 80 70 60 50 40 30 20 10 q
-   copy 10 20 30 40 50 60 70 80 90 100 r
-   copy 100#0 totales
-   pos = 1
-   iteraciones = 10
-   forEach tmpQ q
-      forEach tmpR r
-         i = 1
-         tmp = 0
-         while i <= iteraciones
-            costoFijo = 0
-            costoInventario = 0
-            costoPenalizacion = 0
-            costoTotal = 0
-            Ini = ()
-            PedirQ = ()
-            Dias = ()
-            Venta = ()
-            Final = ()
-            copy 1,30 N
-            calcularInventario tmpQ tmpR Ini PedirQ Dias Venta Final N costoFijo costoInventario costoPenalizacion costoTotal
-            tmp = tmp + costoTotal
-            i = i + 1
-         end
-         tmp = tmp / iteraciones
-         put tmp pos totales
-         pos = pos + 1
-      end
-   end
-   print totales
-end
-
-
-
 /*
 Programa Principal
 */
-
-/*
 
 costoFijo = 0
 costoInventario = 0
@@ -160,7 +147,7 @@ PedirQ = ()
 Dias = ()
 Venta = ()
 Final = ()
-copy 1,30 N
+copy 1,365 N
 
 q = 50
 r = 20
@@ -174,8 +161,7 @@ print costoPenalizacion
 print costoTotal
 
 
-*/
 
-experimentos
+
 
 
