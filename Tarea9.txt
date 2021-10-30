@@ -11,7 +11,10 @@ clearoutput
 
 
 
-
+/*
+Esta Funcion se utiliza para saber la cantidad de dias que puede durar 
+en llegar la mercaderia
+*/
 newcmd calcularDias diasRestantes
    uniform 1 0 1 temp
    if temp < 0.30
@@ -24,28 +27,29 @@ newcmd calcularDias diasRestantes
 end
 
 /*
-bool = 1 significa que se anade una cantidad q 
-bool = 0 solo se reduce 
+Esta funcion se encarga de ordenar el inventario, de acuerdo a los diversos casos,
+en sintesis revisa el inventario actual, calcula la venta del dia, reduce el inventario y dependiendo de si se
+solicito o no nueva mercaderia la coloca en el inventario disponible del dia siguiente
 */ 
 newcmd actualizarInventario Ini Final inventario  Venta bool dia q costoInventario costoPenalizacion
    
-   poisson 1 7 ventaDia
+   poisson 1 7 ventaDia	'Calcula la venta del dia
    put ventaDia dia Venta
-   inventario = inventario - ventaDia
-   if inventario > 0
+   inventario = inventario - ventaDia ' Reduce del inventario lo que se vende durante el dia
+   if inventario > 0	'Para calcular el costo final del inventario
       costoInventario = costoInventario + inventario
    else
-      tmp = -1 * inventario
+      tmp = -1 * inventario	'Para calcular la penalizacion
       costoPenalizacion = costoPenalizacion + tmp
    end
-   put inventario dia Final
+   put inventario dia Final ' Guarda el inventario como quedo al final del dia
    temp2 = dia + 1
-   if bool = 1
+   if bool = 1 'Significa que se debe de sumar al inventario lo que llega de mercaderia nueva
       if temp2 < 366
          inventario = inventario + q
-         put inventario temp2 Ini
+         put inventario temp2 Ini	'Guarda el inventario para que quede listo para el dia siguiente
       end
-   else
+   else 'Solo se alista la mercaderia que hay actualmente
       if temp2 < 366
          put inventario temp2 Ini
       end
@@ -58,21 +62,17 @@ end
 
 
 newcmd calcularInventario q r Ini PedirQ Dias Venta Final N costoFijo costoInventario costoPenalizacion costoTotal
-   
-   
-   inventario = q
+   inventario = q 'Se inicia anadiendo al inventario inicial q cantidad de mercaderia
    diasRestantes = 0
-   
-   copy Ini q Ini
-   foreach dia N
+   copy Ini q Ini 'Se inicia anadiendo al inventario inicial q cantidad de mercaderia
+   foreach dia N	'Por cada dia del anio
       if inventario < r ' Si queda poco inventario
          put 1 dia PedirQ 'Se pide inventario
-         
-         if diasRestantes = 0
+         if diasRestantes = 0 'Si queda poco inventario y todavia no se ha pedido
             costoFijo = costoFijo + 100
-            calcularDias diasRestantes
-            put diasRestantes dia dias
-            if diasRestantes = 1
+            calcularDias diasRestantes 'Se calculan los dia para que llegue el camion
+            put diasRestantes dia dias	
+            if diasRestantes = 1 'Significa que para el dia siguiente se empieza con la nueva mercaderia en el inventario
                actualizarInventario Ini Final inventario  Venta 1 dia q costoInventario costoPenalizacion
                diasRestantes = 0
             else
@@ -91,12 +91,13 @@ newcmd calcularInventario q r Ini PedirQ Dias Venta Final N costoFijo costoInven
             end
          end
       else
-         
+         'Un dia comun donde el inventario es suficiente y el inventario es superior  a r
          put 0 dia PedirQ
          put 0 dia Dias
          actualizarInventario Ini Final inventario  Venta 0 dia q costoInventario costoPenalizacion
       end
    end
+	'Calcula el costo final 
    costoInventario = costoInventario * 20
    costoPenalizacion = costoPenalizacion * 50
    costoTotal = costoInventario + costoPenalizacion + costoFijo
@@ -132,12 +133,12 @@ newcmd experimentos
             tmp = tmp + costoTotal
             i = i + 1
          end
-	tmp = tmp / iteraciones
+         tmp = tmp / iteraciones
          put tmp pos totales
-	pos = pos + 1
+         pos = pos + 1
       end
    end
-	print totales
+   print totales
 end
 
 
@@ -175,6 +176,6 @@ print costoTotal
 
 */
 
-experimentos 
+experimentos
 
 
