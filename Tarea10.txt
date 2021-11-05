@@ -1,0 +1,56 @@
+/*
+Kenneth Corrales Lizano carnet 2017151342 
+Alejandro Tapia Alvarez carnet 2017116952
+*/
+
+clearoutput
+
+
+newcmd obtenerEntrada tiempo
+   exponential 1 40 tiempo
+   integer ceiling tiempo tiempo
+end
+
+newcmd obtenerSalida promedio tiempo
+   exponential 1 promedio tiempo
+   integer ceiling tiempo tiempo
+end
+
+newcmd tiempoPorTrabajador cTrabajadores tiempo
+	c = cTrabajadores * 2
+	tiempo = 43 - c
+end
+
+newcmd ImprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEspera Cola	
+	output "%8.0F %8.0F \t%8.0F %8.0F %8.0F %8.0F %8.0F" Tiempo Evento SigSalida SigEntrada TOcioso TEspera Cola
+end
+
+name Inicio Entrada Salida x Fin
+
+/*
+Programa Principal
+*/
+
+Tiempo = 0
+Evento = 0
+SigSalida = 0
+TOcioso = 0
+TEsperaBus = 0
+Cola = ()
+TEspera = 0
+
+
+
+Evento = Inicio
+SigSalida = x
+obtenerEntrada SigEntrada
+TOcioso = 0
+Ocupados = 0
+input trabajadores 'Ingrese la cantidad de Personal (3-6): 
+tiempoPorTrabajador trabajadores TServicio
+imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEspera Cola
+/*while (Tiempo <= 480)
+   
+end
+
+*/
