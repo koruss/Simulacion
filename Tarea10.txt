@@ -49,7 +49,6 @@ SigSalida = x
 TOcioso = 0
 TEsperaBus = 0
 Cola = ()
-TEspera = 0
 atendiendo = 0
 TiempoAnterior = 0
 
@@ -58,7 +57,7 @@ input trabajadores 'Ingrese la cantidad de Personal (3-6):
 output "Tiempo	Evento		Sig Salida		SigEntrada		T. Ocioso		T.Esp.Bus		Cola"
 print
 tiempoPorTrabajador trabajadores TServicio
-imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEspera Cola
+imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEsperaBus Cola
 Tiempo = SigEntrada
 Evento = Entrada
 TOcioso = SigEntrada
@@ -69,7 +68,7 @@ SigSalida = SigSalida + Tiempo
 
 
 while (Tiempo <= 480)
-   imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEspera Cola
+   imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEsperaBus Cola
    if (SigSalida = x)
       if (SigEntrada <= 480)
          TOcioso = SigEntrada - Tiempo
@@ -107,7 +106,7 @@ while (Tiempo <= 480)
          if (cant > 0 )
             Cola = Cola + ( SigEntrada - Tiempo)
          end
-         Tiempo = Tiempo + SigEntrada
+         Tiempo = SigEntrada
          copy Cola 0 Cola
          obtenerEntrada SigEntrada
          SigEntrada = SigEntrada + Tiempo
@@ -135,7 +134,7 @@ while (Tiempo <= 480)
    end
 end
 while(SigSalida <> x )
-   imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEspera Cola
+   imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEsperaBus Cola
    TiempoAnterior = Tiempo
    Tiempo = SigSalida
    Evento = Salida
