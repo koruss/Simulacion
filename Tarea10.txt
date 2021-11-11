@@ -1,6 +1,12 @@
 /*
 Kenneth Corrales Lizano carnet 2017151342 
 Alejandro Tapia Alvarez carnet 2017116952
+
+Solución al costo total para 3 empleados  = 19815.5101
+Solución al costo total para 4 empleados  = 21744.062
+Solución al costo total para 5 empleados  = 22789.7561
+Solución al costo total para 6 empleados  = 22973.7682
+		
 */
 
 clearoutput
@@ -36,6 +42,7 @@ end
 
 newcmd imprimirFinal Tiempo
    output "%7.0F Fin" Tiempo
+   print
 end
 
 
@@ -43,77 +50,54 @@ end
 Programa Principal
 */
 
-Tiempo = 0
-Evento = Inicio
-SigSalida = x
-TOcioso = 0
-TEsperaBus = 0
-Cola = ()
-atendiendo = 0
-TiempoAnterior = 0
-
-obtenerEntrada SigEntrada
 input trabajadores 'Ingrese la cantidad de Personal (3-6):
-output "Tiempo	Evento		Sig Salida		SigEntrada		T. Ocioso		T.Esp.Bus		Cola"
-print
-tiempoPorTrabajador trabajadores TServicio
-imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEsperaBus Cola
-Tiempo = SigEntrada
-Evento = Entrada
-TOcioso = SigEntrada
-obtenerEntrada SigEntrada
-SigEntrada = SigEntrada + Tiempo
-obtenerSalida TServicio SigSalida
-SigSalida = SigSalida + Tiempo
 
 
-while (Tiempo <= 480)
-   imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEsperaBus Cola
-   if (SigSalida = x)
-      if (SigEntrada <= 480)
-         TOcioso = SigEntrada - Tiempo
-         Tiempo = SigEntrada
-         Evento = Entrada
-         obtenerSalida TServicio SigSalida
-         SigSalida = SigSalida + Tiempo
-         obtenerEntrada SigEntrada
-         SigEntrada = SigEntrada + Tiempo
-      else
-         TOcioso = 480 - Tiempo
-         Tiempo = 480
-         Evento = Fin
-      end
-   elseif (SigSalida < SigEntrada)
-      TiempoAnterior = Tiempo
-      Tiempo = SigSalida
-      Evento = Salida
-      TOcioso = 0
-      size Cola cant
-      if (cant > 0)
-         Cola = Cola + (Tiempo - TiempoAnterior)
-         take Cola 1 TEsperaBus
-         remove Cola 1 Cola
-         obtenerSalida TServicio SigSalida
-         SigSalida = Tiempo + SigSalida
-      else
-         SigSalida = x
-         atendiendo = 0
-         TEsperaBus = 0
-      end
-   else
-      if (SigEntrada <= 480)
-         size Cola cant
-         if (cant > 0 )
-            Cola = Cola + ( SigEntrada - Tiempo)
+newcmd main trabajadores costoTotal
+   Tiempo = 0
+   Evento = Inicio
+   SigSalida = x
+   TOcioso = 0
+   TEsperaBus = 0
+   Cola = ()
+   atendiendo = 0
+   TiempoAnterior = 0
+   Salarios = 0
+   CostoTiempoOcioso = 0
+   CostoEsperaBuses = 0
+   CostoOperacionAlmacen = 0
+   CostoTotal = 0
+   obtenerEntrada SigEntrada
+  ' output "Tiempo	Evento		Sig Salida		SigEntrada		T. Ocioso		T.Esp.Bus		Cola"
+   print
+   tiempoPorTrabajador trabajadores TServicio
+'   imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEsperaBus Cola
+   Tiempo = SigEntrada
+   Evento = Entrada
+   TOcioso = SigEntrada
+   CostoTiempoOcioso = TOcioso
+   obtenerEntrada SigEntrada
+   SigEntrada = SigEntrada + Tiempo
+   obtenerSalida TServicio SigSalida
+   SigSalida = SigSalida + Tiempo
+   while (Tiempo < 480)
+      'imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEsperaBus Cola
+      if (SigSalida = x)
+         if (SigEntrada <= 480)
+            TOcioso = SigEntrada - Tiempo
+            CostoTiempoOcioso = CostoTiempoOcioso + TOcioso
+            Tiempo = SigEntrada
+            Evento = Entrada
+            obtenerSalida TServicio SigSalida
+            SigSalida = SigSalida + Tiempo
+            obtenerEntrada SigEntrada
+            SigEntrada = SigEntrada + Tiempo
+         else
+            TOcioso = 480 - Tiempo
+            Tiempo = 480
+            Evento = Fin
          end
-         Tiempo = SigEntrada
-         copy Cola 0 Cola
-         obtenerEntrada SigEntrada
-         SigEntrada = SigEntrada + Tiempo
-         TOcioso = 0
-         TEsperaBus = 0
-         Evento = Entrada
-      else
+      elseif (SigSalida < SigEntrada)
          TiempoAnterior = Tiempo
          Tiempo = SigSalida
          Evento = Salida
@@ -122,6 +106,7 @@ while (Tiempo <= 480)
          if (cant > 0)
             Cola = Cola + (Tiempo - TiempoAnterior)
             take Cola 1 TEsperaBus
+            CostoEsperaBuses = CostoEsperaBuses + TEsperaBus
             remove Cola 1 Cola
             obtenerSalida TServicio SigSalida
             SigSalida = Tiempo + SigSalida
@@ -130,34 +115,90 @@ while (Tiempo <= 480)
             atendiendo = 0
             TEsperaBus = 0
          end
+      else
+         if (SigEntrada <= 480)
+            size Cola cant
+            if (cant > 0 )
+               Cola = Cola + ( SigEntrada - Tiempo)
+            end
+            Tiempo = SigEntrada
+            copy Cola 0 Cola
+            obtenerEntrada SigEntrada
+            SigEntrada = SigEntrada + Tiempo
+            TOcioso = 0
+            TEsperaBus = 0
+            Evento = Entrada
+         else
+            TiempoAnterior = Tiempo
+            Tiempo = SigSalida
+            Evento = Salida
+            TOcioso = 0
+            size Cola cant
+            if (cant > 0)
+               Cola = Cola + (Tiempo - TiempoAnterior)
+               take Cola 1 TEsperaBus
+               CostoEsperaBuses = CostoEsperaBuses + TEsperaBus
+               remove Cola 1 Cola
+               obtenerSalida TServicio SigSalida
+               SigSalida = Tiempo + SigSalida
+            else
+               SigSalida = x
+               atendiendo = 0
+               TEsperaBus = 0
+            end
+         end
       end
    end
-end
-while(SigSalida <> x )
-   imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEsperaBus Cola
-   TiempoAnterior = Tiempo
-   Tiempo = SigSalida
-   Evento = Salida
-   TOcioso = 0
-   size Cola cant
-   if (cant > 0)
-      Cola = Cola + (Tiempo - TiempoAnterior)
-      take Cola 1 TEsperaBus
-      remove Cola 1 Cola
-      obtenerSalida TServicio SigSalida
-      SigSalida = Tiempo + SigSalida
-   else
-      SigSalida = x
-      atendiendo = 0
-      TEsperaBus = 0
+   while(SigSalida <> x )
+      'imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEsperaBus Cola
+      TiempoAnterior = Tiempo
+      Tiempo = SigSalida
+      Evento = Salida
+      TOcioso = 0
+      size Cola cant
+      if (cant > 0)
+         Cola = Cola + (Tiempo - TiempoAnterior)
+         take Cola 1 TEsperaBus
+         CostoEsperaBuses = CostoEsperaBuses + TEsperaBus
+         remove Cola 1 Cola
+         obtenerSalida TServicio SigSalida
+         SigSalida = Tiempo + SigSalida
+      else
+         SigSalida = x
+         atendiendo = 0
+         TEsperaBus = 0
+      end
    end
+  ' imprimirFinal Tiempo
+   Salario = 8 *trabajadores * 25 + trabajadores*(Tiempo - 480) *37.50
+   CostoTiempoOcioso = trabajadores * (CostoTiempoOcioso / 60 ) * 25
+   CostoOperacionAlmacen = (Tiempo / 60) * 500
+   CostoEsperaBuses = (CostoEsperaBuses / 60 ) * 100
+   CostoTotal = Salario + CostoTiempoOcioso + CostoOperacionAlmacen + CostoEsperaBuses
+'PRINT Salario CostoTiempoOcioso  CostoOperacionAlmacen CostoEsperaBuses   CostoTotal 
 end
-imprimirFinal Tiempo
 
 
+newcmd Experimentos
+   iteraciones = 1000000
+   temp = iteraciones
+   copy 3,6 trabajadores
+   copy 4#0 costosTotales
+   while (iteraciones > 0)
+      pos = 1
+      while (pos < 5)
+         take trabajadores pos cant
+         main cant costoTotal
+         take costosTotales pos suma
+         suma = suma + costoTotal
+         put suma pos costosTotales
+         pos = pos + 1
+      end
+      iteraciones = iteraciones - 1
+   end
+   costosTotales = costosTotales / temp
+   print table trabajadores%10.4F costosTotales%10.4F
+   
+end
 
-
-
-
-
-
+Experimentos
