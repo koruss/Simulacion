@@ -46,11 +46,14 @@ newcmd imprimirFinal Tiempo
 end
 
 
+
+
 /*
 Programa Principal
 */
 
 input trabajadores 'Ingrese la cantidad de Personal (3-6):
+
 
 
 newcmd main trabajadores costoTotal
@@ -68,10 +71,10 @@ newcmd main trabajadores costoTotal
    CostoOperacionAlmacen = 0
    CostoTotal = 0
    obtenerEntrada SigEntrada
-  ' output "Tiempo	Evento		Sig Salida		SigEntrada		T. Ocioso		T.Esp.Bus		Cola"
+   output "Tiempo	Evento		Sig Salida		SigEntrada		T. Ocioso		T.Esp.Bus		Cola"
    print
    tiempoPorTrabajador trabajadores TServicio
-'   imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEsperaBus Cola
+   imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEsperaBus Cola
    Tiempo = SigEntrada
    Evento = Entrada
    TOcioso = SigEntrada
@@ -81,7 +84,7 @@ newcmd main trabajadores costoTotal
    obtenerSalida TServicio SigSalida
    SigSalida = SigSalida + Tiempo
    while (Tiempo < 480)
-      'imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEsperaBus Cola
+      imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEsperaBus Cola
       if (SigSalida = x)
          if (SigEntrada <= 480)
             TOcioso = SigEntrada - Tiempo
@@ -150,7 +153,7 @@ newcmd main trabajadores costoTotal
       end
    end
    while(SigSalida <> x )
-      'imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEsperaBus Cola
+      imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEsperaBus Cola
       TiempoAnterior = Tiempo
       Tiempo = SigSalida
       Evento = Salida
@@ -169,36 +172,14 @@ newcmd main trabajadores costoTotal
          TEsperaBus = 0
       end
    end
-  ' imprimirFinal Tiempo
+   imprimirFinal Tiempo
    Salario = 8 *trabajadores * 25 + trabajadores*(Tiempo - 480) *37.50
    CostoTiempoOcioso = trabajadores * (CostoTiempoOcioso / 60 ) * 25
    CostoOperacionAlmacen = (Tiempo / 60) * 500
    CostoEsperaBuses = (CostoEsperaBuses / 60 ) * 100
    CostoTotal = Salario + CostoTiempoOcioso + CostoOperacionAlmacen + CostoEsperaBuses
-'PRINT Salario CostoTiempoOcioso  CostoOperacionAlmacen CostoEsperaBuses   CostoTotal 
+PRINT Salario CostoTiempoOcioso  CostoOperacionAlmacen CostoEsperaBuses   CostoTotal 
 end
 
 
-newcmd Experimentos
-   iteraciones = 1000000
-   temp = iteraciones
-   copy 3,6 trabajadores
-   copy 4#0 costosTotales
-   while (iteraciones > 0)
-      pos = 1
-      while (pos < 5)
-         take trabajadores pos cant
-         main cant costoTotal
-         take costosTotales pos suma
-         suma = suma + costoTotal
-         put suma pos costosTotales
-         pos = pos + 1
-      end
-      iteraciones = iteraciones - 1
-   end
-   costosTotales = costosTotales / temp
-   print table trabajadores%10.4F costosTotales%10.4F
-   
-end
-
-Experimentos
+main trabajadores ct
