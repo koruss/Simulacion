@@ -4,7 +4,8 @@ Alejandro Tapia Alvarez carnet 2017116952
 */
 
 clearoutput
-
+name Inicio Entrada Salida x Fin
+global Inicio Entrada Salida x Fin
 
 newcmd obtenerEntrada tiempo
    exponential 1 40 tiempo
@@ -17,40 +18,147 @@ newcmd obtenerSalida promedio tiempo
 end
 
 newcmd tiempoPorTrabajador cTrabajadores tiempo
-	c = cTrabajadores * 2
-	tiempo = 43 - c
+   c = cTrabajadores * 2
+   tiempo = 43 - c
 end
 
-newcmd ImprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEspera Cola	
-	output "%8.0F %8.0F \t%8.0F %8.0F %8.0F %8.0F %8.0F" Tiempo Evento SigSalida SigEntrada TOcioso TEspera Cola
+newcmd ImprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEspera Cola
+   if SigSalida = x
+      output "%7.0F %8.0F \t        %8.0F \t\t\t%27.0F %24.0F %24.0F" Tiempo Evento SigSalida SigEntrada TOcioso TEspera
+   else
+      output "%7.0F %8.0F  \t%24.0F   %23.0F    %27.0F %24.0F" Tiempo Evento SigSalida SigEntrada TOcioso TEspera
+   end
+   forEach i Cola
+      output " %3.0F" i
+   end
+   print
 end
 
-name Inicio Entrada Salida x Fin
+newcmd imprimirFinal Tiempo
+   output "%7.0F Fin" Tiempo
+end
+
 
 /*
 Programa Principal
 */
 
 Tiempo = 0
-Evento = 0
-SigSalida = 0
+Evento = Inicio
+SigSalida = x
 TOcioso = 0
 TEsperaBus = 0
 Cola = ()
 TEspera = 0
+atendiendo = 0
+TiempoAnterior = 0
 
-
-
-Evento = Inicio
-SigSalida = x
 obtenerEntrada SigEntrada
-TOcioso = 0
-Ocupados = 0
-input trabajadores 'Ingrese la cantidad de Personal (3-6): 
+input trabajadores 'Ingrese la cantidad de Personal (3-6):
+output "Tiempo	Evento		Sig Salida		SigEntrada		T. Ocioso		T.Esp.Bus		Cola"
+print
 tiempoPorTrabajador trabajadores TServicio
 imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEspera Cola
-/*while (Tiempo <= 480)
-   
-end
+Tiempo = SigEntrada
+Evento = Entrada
+TOcioso = SigEntrada
+obtenerEntrada SigEntrada
+SigEntrada = SigEntrada + Tiempo
+obtenerSalida TServicio SigSalida
+SigSalida = SigSalida + Tiempo
 
-*/
+
+while (Tiempo <= 480)
+   imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEspera Cola
+   if (SigSalida = x)
+      if (SigEntrada <= 480)
+         TOcioso = SigEntrada - Tiempo
+         Tiempo = SigEntrada
+         Evento = Entrada
+         obtenerSalida TServicio SigSalida
+         SigSalida = SigSalida + Tiempo
+         obtenerEntrada SigEntrada
+         SigEntrada = SigEntrada + Tiempo
+      else
+         TOcioso = 480 - Tiempo
+         Tiempo = 480
+         Evento = Fin
+      end
+   elseif (SigSalida < SigEntrada)
+      TiempoAnterior = Tiempo
+      Tiempo = SigSalida
+      Evento = Salida
+      TOcioso = 0
+      size Cola cant
+      if (cant > 0)
+         Cola = Cola + (Tiempo - TiempoAnterior)
+         take Cola 1 TEsperaBus
+         remove Cola 1 Cola
+         obtenerSalida TServicio SigSalida
+         SigSalida = Tiempo + SigSalida
+      else
+         SigSalida = x
+         atendiendo = 0
+         TEsperaBus = 0
+      end
+   else
+      if (SigEntrada <= 480)
+         size Cola cant
+         if (cant > 0 )
+            Cola = Cola + ( SigEntrada - Tiempo)
+         end
+         Tiempo = Tiempo + SigEntrada
+         copy Cola 0 Cola
+         obtenerEntrada SigEntrada
+         SigEntrada = SigEntrada + Tiempo
+         TOcioso = 0
+         TEsperaBus = 0
+         Evento = Entrada
+      else
+         TiempoAnterior = Tiempo
+         Tiempo = SigSalida
+         Evento = Salida
+         TOcioso = 0
+         size Cola cant
+         if (cant > 0)
+            Cola = Cola + (Tiempo - TiempoAnterior)
+            take Cola 1 TEsperaBus
+            remove Cola 1 Cola
+            obtenerSalida TServicio SigSalida
+            SigSalida = Tiempo + SigSalida
+         else
+            SigSalida = x
+            atendiendo = 0
+            TEsperaBus = 0
+         end
+      end
+   end
+end
+while(SigSalida <> x )
+   imprimirFila Tiempo Evento SigSalida SigEntrada TOcioso TEspera Cola
+   TiempoAnterior = Tiempo
+   Tiempo = SigSalida
+   Evento = Salida
+   TOcioso = 0
+   size Cola cant
+   if (cant > 0)
+      Cola = Cola + (Tiempo - TiempoAnterior)
+      take Cola 1 TEsperaBus
+      remove Cola 1 Cola
+      obtenerSalida TServicio SigSalida
+      SigSalida = Tiempo + SigSalida
+   else
+      SigSalida = x
+      atendiendo = 0
+      TEsperaBus = 0
+   end
+end
+imprimirFinal Tiempo
+
+
+
+
+
+
+
+
